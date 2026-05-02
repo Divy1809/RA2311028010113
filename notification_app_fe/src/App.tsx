@@ -1,16 +1,19 @@
 import { useEffect } from "react";
-import { fetchNotifications } from "./services/api";
-import { getTopNotifications } from "./utils/getTopNotifications";
+import { getTopNotificationsHeap } from "./utils/getTopNotificationsHeap";
 import { mockNotifications } from "./data/mockNotifications";
-
+import { logger } from "../../logging_middleware/logger";
 
 function App() {
   useEffect(() => {
     const run = async () => {
-      const data = mockNotifications;
-      const top10 = getTopNotifications(data, 10);
+      try {
+        const data = mockNotifications;
+        const top10 = getTopNotificationsHeap(data, 10);
 
-      console.log("Top Notifications:", top10);
+        logger.info("Top Notifications fetched", top10);
+      } catch (error) {
+        logger.error("Error processing notifications", error);
+      }
     };
 
     run();
